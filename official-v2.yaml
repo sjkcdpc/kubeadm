@@ -1,0 +1,26 @@
+apiVersion: kubeadm.k8s.io/v1beta1
+kind: ClusterConfiguration
+kubernetesVersion: v1.13.3
+imageRepository: registry.cn-hangzhou.aliyuncs.com/google_containers
+etcd:
+  local:
+    imageTag: "3.2.24"
+    dataDir: "/data/kubernetes/etcd"
+controllerManager:
+  extraArgs:
+    horizontal-pod-autoscaler-sync-period: "10s"
+apiServer:
+  extraArgs:
+    service-node-port-range: "1-65535"
+    runtime-config: "api/all=true"
+  certSANs:
+  - "k8s-m1.bigsfintech.local"
+controlPlaneEndpoint: "haproxy.bigsfintech.local:6443"
+networking:
+  serviceSubnet: "172.30.0.0/16"
+  podSubnet: "172.31.0.0/16"
+  dnsDomain: "cluster.local"
+---
+apiVersion: kubeproxy.config.k8s.io/v1alpha1
+kind: KubeProxyConfiguration
+mode: ipvs
