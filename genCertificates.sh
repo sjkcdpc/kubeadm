@@ -1,12 +1,25 @@
 #!/bin/bash
-etcdPeerCN='k8s-m1.bigsfintech.local'
-etcdPeerIP1='172.17.0.230'
-apiserverDns1='k8s-m1.bigsfintech.local'
+# Description: generate certs for k8s master host
+# Date: 20190625
+# version: 1.0
+# Author: winthcloud
+host_ip=$1
+host_name=$2
+api_server=$3
+k8s_service_ip=$4
+etcdPeerCN=${host_name}
+etcdPeerIP1=${host_ip}
+apiserverDns1=${host_name}
 #service IP (below)
-apiserverIP1='172.30.0.1'
-apiserverIP2='172.17.0.230'
-apiserverEndpointDNS='haproxy.bigsfintech.local'
+apiserverIP1=${k8s_service_ip}
+apiserverIP2=${host_ip}
+apiserverEndpointDNS=${api_server}
 keypath=/etc/kubernetes/pki
+
+[ -z "${host_ip}" ] && echo "You need to input host IP" && exit 200
+[ -z "${host_name}" ] && echo "You need to input host name" && exit 200
+[ -z "${api_server}" ] && echo "You need to input api server name" && exit 200
+[ -z "${k8s_service_ip}" ] && echo "You need to input k8s service IP" && exit 200
 
 #[ -d "$keypath" ] && rm -rf $keypath
 [ -d "$keypath/etcd" ] || mkdir $keypath/etcd -p
