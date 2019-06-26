@@ -33,3 +33,5 @@ cat > /etc/sysconfig/kubelet <<EOF
 KUBELET_EXTRA_ARGS="--root-dir=/data/kubelet"
 EOF
 
+swapoff -a
+sed -i 's/.*swap.*/#&/' /etc/fstab
