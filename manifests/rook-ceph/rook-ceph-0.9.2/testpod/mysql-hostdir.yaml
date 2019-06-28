@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: wordpress-mysql-hostdir
+  labels:
+    app: wordpress-hostdir
+spec:
+  ports:
+    - port: 3306
+  selector:
+    app: wordpress-hostdir
+    tier: mysql-hostdir
+  clusterIP: None
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wordpress-mysql-hostdir
+  labels:
+    app: wordpress-hostdir
+spec:
+  selector:
+    matchLabels:
+      app: wordpress-hostdir
+      tier: mysql-hostdir
+  template:
+    metadata:
+      labels:
+        app: wordpress-hostdir
+        tier: mysql-hostdir
+    spec:
+      nodeName: 'k8s-n01.sxkj.online'
+      containers:
+      - image: harbor.sxkj.online/app/mysql:5.6.42
+        name: mysql-hostdir
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: changeme
+        ports:
+        - containerPort: 3306
+          name: mysql
+        volumeMounts:
+        - name: mysql-hostdir
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: mysql-hostdir
+        hostPath: 
+          path: /test/mysql
+          type: DirectoryOrCreate

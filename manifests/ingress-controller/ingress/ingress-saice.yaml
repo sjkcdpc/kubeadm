@@ -1,0 +1,35 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-saice
+  namespace: data-finance
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: saice.k8s.sxkj.online
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: saice-front
+          servicePort: 80
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-saice-1
+  namespace: data-finance
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+spec:
+  rules:
+  - host: saice.k8s.sxkj.online
+    http:
+      paths:
+      - path: /customer/api/?(.*)
+        backend:
+          serviceName: saice-cloud
+          servicePort: 8080

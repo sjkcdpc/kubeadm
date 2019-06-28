@@ -1,0 +1,18 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: custom-metrics-resource-reader
+rules:
+- apiGroups:
+  - ""
+  - "/"
+  - "/api/v1"
+  resources:
+  - namespaces
+  - pods
+  - services
+  - nodes
+  verbs:
+  - get
+  - list
+  - watch

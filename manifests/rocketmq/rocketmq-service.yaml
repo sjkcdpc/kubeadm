@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+    app: rocketmq
+  name: rocketmq-srv
+  namespace: default
+spec:
+  ports:
+    - port: 9876
+      targetPort: 9876
+  selector:
+    app: rocketmq

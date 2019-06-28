@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orientdb-one
+  namespace: default
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: orientdb-one
+  template:
+    metadata:
+      labels:
+        app: orientdb-one
+    spec:
+      containers:
+      - name: orientdb-one
+        image: harbor.sxkj.online/app/orientdb:2.2.24
+        env:
+        - name: ORIENTDB_ROOT_PASSWORD
+          value: d89onWYfxRrC4g
+        volumeMounts:
+        - name: orient-one
+          mountPath: /orientdb/databases
+        - name: orient-one-backup
+          mountPath: /orientdb/backup
+      volumes:
+      - name: orient-one
+        persistentVolumeClaim:
+          claimName: data-orientdb-one
+      - name: orient-one-backup
+        persistentVolumeClaim:
+          claimName: data-orientdb-one-backup

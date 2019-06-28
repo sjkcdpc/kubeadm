@@ -1,0 +1,80 @@
+global:
+  resolve_timeout: 5m
+  smtp_smarthost: 'mail.beadwallet.com:587'
+  smtp_from: 'xxsj-system@beadwallet.com'
+  smtp_auth_username: 'xxsj-system@sxkj.intra'
+  smtp_auth_password: 'V2tu86t35a'
+  smtp_require_tls: true
+  wechat_api_url: "https://qyapi.weixin.qq.com/cgi-bin/"
+  wechat_api_corp_id: "wwc24afdbe0e2cbf13"
+
+
+route:
+  receiver: 'send_to_dingding_webhook1'
+  group_by: ['alertname']
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 1h
+  routes:
+  - receiver: 'send_to_dingding_webhook1'
+    group_by: ['alertname']
+    group_wait: 10s
+    group_interval: 10s
+    repeat_interval: 1h
+    match_re: {"severity": "critical|warning"}
+  - receiver: 'send_to_dingding_webhook1'
+    group_by: ['alertname']
+    group_wait: 10s
+    group_interval: 10s
+    repeat_interval: 24h
+    match_re: {"severity": "none"}
+  - receiver: 'send_to_mail'
+    group_by: ['alertname']
+    group_wait: 10s
+    group_interval: 10s
+    repeat_interval: 1h
+    match: {"mail": "test"}
+  - receiver: 'dataplatform-wechat'
+    match:
+      receiver: dataplatform-wechat
+  - receiver: 'dataplatform-dingtalk'
+    match:
+      receiver: dataplatform-dingtalk
+  - receiver: 'bi-wechat'
+    match:
+      receiver: bi-wechat
+receivers:
+- name: 'send_to_dingding_webhook1'
+  webhook_configs:
+  - url: 'http://webhook-dingtalk-svc:8060/dingtalk/webhook1/send'
+    send_resolved: true
+- name: 'send_to_mail'
+  email_configs:
+  - to: 'liujinming@beadwallet.com'
+    send_resolved: true
+    require_tls: true
+    tls_config:
+      ca_file: /etc/ssl/ca.pem
+- name: 'dataplatform-dingtalk'
+  webhook_configs:
+  - url: 'http://webhook-dingtalk-svc:8060/dingtalk/dataplatform/send'
+    send_resolved: false
+- name: 'dataplatform-wechat'
+  wechat_configs:
+    - send_resolved: false
+      to_user: "SiMaTe"
+      to_party: "" 
+      to_tag: ""
+      agent_id: 1000003
+      corp_id: "wwc24afdbe0e2cbf13" 
+      api_secret: "e4MYOv-B2uV5_gejTvMgBqvLgoewz-49rrxyTfFeU-Q"
+- name: 'bi-wechat'
+  wechat_configs:
+    - send_resolved: false
+      to_user: "SiMaTe"
+      to_party: "" 
+      to_tag: ""
+      agent_id: 1000002
+      corp_id: "wwc24afdbe0e2cbf13" 
+      api_secret: "xej8It4JU6WXF7a4J9uivZmKinaXutEPNUQ4YJqBOzs"
+

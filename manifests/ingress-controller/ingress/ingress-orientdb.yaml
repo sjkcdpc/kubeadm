@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-orientdb
+  namespace: default
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  rules:
+  - host: orientdb.k8s.sxkj.online
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: orientdb-client
+          servicePort: 2480

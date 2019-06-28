@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: phpmyadmin
+  namespace: default
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: phpmyadmin
+  template:
+    metadata:
+      labels:
+        app: phpmyadmin
+    spec:
+      containers:
+      - name: phpmyadmin
+        image: harbor.sxkj.online/app/phpmyadmin:4.9
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: PMA_HOST
+          value: "mysql-mysql"
+        - name: PMA_PPOR
+          value: "3306"

@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-single
+  namespace: default
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: mysql-single
+  template:
+    metadata:
+      labels:
+        app: mysql-single
+    spec:
+      nodeName: "k8s-n01.sxkj.online"
+      securityContext:
+        runAsUser: 0
+      containers:
+      - name: mysql-single
+        image: harbor.sxkj.online/app/mysql:5.7.26
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "POCZsdd9Cft9SS2Zvepe"
+        ports:
+        - containerPort: 3306
+          protocol: TCP
+        livenessProbe:
+          tcpSocket:
+            port: 3306
+          initialDelaySeconds: 60
+          timeoutSeconds: 5
+        volumeMounts:
+        - name: host-dir
+          mountPath: /var/lib/mysql
+        - name: mysql-conf
+          mountPath: /etc/mysql/mysql.conf.d/
+      volumes:
+      - name: host-dir
+        hostPath:
+          path: /test1/mysql-pod
+          type: DirectoryOrCreate
+      - name: mysql-conf
+        configMap:
+          name: mysql-single-conf
+          items:
+          - key: my.cnf
+            path: my.cnf

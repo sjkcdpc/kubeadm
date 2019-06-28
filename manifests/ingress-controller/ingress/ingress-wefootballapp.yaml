@@ -1,0 +1,24 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-wefootballapp
+  namespace: sport-football
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+spec:
+  rules:
+  - host: www.91sxty.com
+    http:
+      paths:
+      - path: /?(.*)
+        backend:
+          serviceName: wefootballapp
+          servicePort: 8080
+  - host: 91sxty.com
+    http:
+      paths:
+      - path: /?(.*)
+        backend:
+          serviceName: wefootballapp
+          servicePort: 8080

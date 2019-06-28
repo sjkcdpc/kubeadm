@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: mysql
+  name: mysql
+  namespace: default
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - name: mysql
+        image: harbor.sxkj.online/app/mysql:5.6.42
+        env: 
+        - name: MYSQL_ROOT_PASSWORD
+          value: mysql
+        ports:
+        - containerPort: 3306
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 2000Mi
+          requests:
+            cpu: 100m
+            memory: 30Mi
+---
+# # ------------------- Service ------------------- #
+
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+    app: mysql
+  name: mysql
+  namespace: default
+spec:
+  ports:
+    - port: 3306
+      targetPort: 3306
+  selector:
+    app: mysql

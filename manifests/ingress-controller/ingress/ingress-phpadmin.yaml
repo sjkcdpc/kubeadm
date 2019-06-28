@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-phpmyadmin
+  namespace: default
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  rules:
+  - host: mysql.k8s.sxkj.online
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: phpmyadmin
+          servicePort: 80

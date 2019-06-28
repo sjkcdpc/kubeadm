@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: rocketmq
+  name: rocketmq
+  namespace: default
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: rocketmq
+  template:
+    metadata:
+      labels:
+        app: rocketmq
+    spec:
+      containers:
+      - name: rocketmq
+        image: harbor.sxkj.online/app/rocketmq:4.4.0.2
+        env:
+        - name: msmem
+          value: "4"
+        - name: mxmem
+          value: "4"
+        - name: mnmem
+          value: "2"
+        ports:
+        - containerPort: 9876
+          protocol: TCP
+        livenessProbe:
+          tcpSocket:
+            port: 9876
+          initialDelaySeconds: 50
+          timeoutSeconds: 5
+#        readinessProbe:
+#          initialDelaySeconds: 15
+#          successThreshold: 2
+#          timeoutSeconds: 5
+#          failureThreshold: 2
+#          periodSeconds: 5
+#          httpGet: 
+#            path: /info
+#            port: 8080
+        resources:
+          limits:
+            cpu: 2000m
+            memory: 8192Mi
+          requests:
+            cpu: 1000m
+            memory: 2048Mi

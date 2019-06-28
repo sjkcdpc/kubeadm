@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prometheus-webhook-dingtalk
+  namespace: monitoring
+  labels:
+    app: prometheus-webhook-dingtalk
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prometheus-webhook-dingtalk
+  template:
+    metadata:
+      labels:
+        app: prometheus-webhook-dingtalk
+    spec:
+      containers:
+      - name: prometheus-webhook-dingtalk
+        image: harbor.sxkj.online/app/prometheus-webhook-dingtalk:v0.3.0
+        args:
+        - --ding.profile=webhook1=https://oapi.dingtalk.com/robot/send?access_token=c7e6081a5a869f4b94e1665af93abdcfc2df6c8ba292479c373c3809134afac0
+        - --ding.profile=dataplatform=https://oapi.dingtalk.com/robot/send?access_token=aad0c2f68a10f0cecfc1f32073e3bfcbc17ce9818332e5e283a12715db161ceb
+        ports:
+        - name: http
+          containerPort: 8060
+        livenessProbe:
+          tcpSocket:
+            port: 8060
+          failureThreshold: 2
+          initialDelaySeconds: 5
+        resources:
+          limits:
+            cpu: 500m
+            memory: 1000Mi
+          requests:
+            cpu: 100m
+            memory: 100Mi
