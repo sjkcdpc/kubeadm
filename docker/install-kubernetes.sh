@@ -26,8 +26,8 @@ EOF
 chmod +x /etc/rc.local
 bash /etc/rc.local
 
-yum install kubernetes-cni-0.6.0 -y
-yum install kubelet-1.13.3 kubectl-1.13.3 kubeadm-1.13.3 ipvsadm -y
+yum install kubelet-1.13.3 -y
+yum install kubectl-1.13.3 kubeadm-1.13.3 ipvsadm -y
 
 cat > /etc/sysconfig/kubelet <<EOF
 KUBELET_EXTRA_ARGS="--root-dir=/data/kubelet"
