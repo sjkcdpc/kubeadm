@@ -3,6 +3,7 @@
 # Date: 20190625
 # version: 1.0
 # Author: winthcloud
+# bash genCertificates.sh 172.17.0.230 node1 node1.cluster.local 172.30.0.1
 host_ip=$1
 host_name=$2
 api_server=$3
