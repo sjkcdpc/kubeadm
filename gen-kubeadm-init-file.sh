@@ -3,6 +3,8 @@
 # Date: 20190625
 # Version: 1.0
 # Author: Winthcloud
+# bash gen-kubeadm-init-file.sh k8s-m1.sxkj.local k8s-m1.sxkj.local 172.30.0.0/16 172.31.0.0/16
+
 
 host_name=$1
 api_server=$2
